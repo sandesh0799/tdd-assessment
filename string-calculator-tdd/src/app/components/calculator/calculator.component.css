@@ -49,3 +49,28 @@ label {
 .calculate-btn:hover {
     background-color: #45a049;
 }
+
+.result-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #e8f5e9;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.result-section h3 {
+    color: #2e7d32;
+    margin: 0;
+}
+
+.error-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #ffebee;
+    border-radius: 4px;
+}
+
+.error-message {
+    color: #c62828;
+    margin: 0;
+}

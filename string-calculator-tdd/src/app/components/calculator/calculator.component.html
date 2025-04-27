@@ -2,10 +2,16 @@
     <div class="input-section">
         <div class="form-group">
             <label for="inputString">Enter comma-separated numbers:</label>
-            <input type="text" id="inputString" class="form-control">
+            <input type="text" [(ngModel)]="inputString" class="form-control" placeholder="e.g. '1,2,3' or '//;\n1;2'">
         </div>
 
-        <button class="calculate-btn">Calculate Sum</button>
+        <button class="calculate-btn" (click)="calculateSum()">Calculate Sum</button>
+    </div>
+    <div *ngIf="result !== null" class="result-section">
+        <h3>Result: {{ result }}</h3>
     </div>
 
+    <div *ngIf="errorMessage" class="error-section">
+        <p class="error-message">{{ errorMessage }}</p>
+    </div>
 </div>
