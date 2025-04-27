@@ -4,11 +4,10 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class CalculatorService {
-
-  constructor() { }
+  constructor() {}
 
   add(numbers: string): number {
-    if (numbers === '') {
+    if (!numbers) {
       return 0;
     }
 
@@ -16,19 +15,30 @@ export class CalculatorService {
     let numbersToProcess = numbers;
 
     if (numbers.startsWith('//')) {
-      delimiter = numbers.charAt(2);
+      const delimiterMatch = numbers.match(/^\/\/\[(.+)]\n/);
+      if (delimiterMatch) {
+        delimiter = delimiterMatch[1];
+      } else {
+        const simpleDelimiterMatch = numbers.match(/^\/\/(.)\n/);
+        if (simpleDelimiterMatch) {
+          delimiter = simpleDelimiterMatch[1];
+        }
+      }
       numbersToProcess = numbers.substring(numbers.indexOf('\n') + 1);
     }
 
-    const normalizedInput = numbersToProcess.replace(/\n/g, delimiter);
+    numbersToProcess = numbersToProcess.replace(/\\n(\d+)/g, ',$1');
 
-    const nums = normalizedInput.split(delimiter).map(num => {
-      return num ? parseInt(num, 10) : 0;
-    });
+    const escapedDelimiter = delimiter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const splitRegex = new RegExp(`${escapedDelimiter}|\n`);
+
+    const nums = numbersToProcess
+      .split(splitRegex)
+      .map(num => (num.trim() ? parseInt(num.trim(), 10) : 0));
 
     const negatives = nums.filter(num => num < 0);
     if (negatives.length > 0) {
-      throw new Error(`Negative numbers not allowed: ${negatives.join(',')}`);
+      throw new Error(`negative numbers not allowed ${negatives.join(',')}`);
     }
 
     return nums.reduce((sum, num) => sum + num, 0);
